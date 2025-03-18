@@ -1,9 +1,11 @@
+<nav class="navbar">
+  <a routerLink="/save-manager" routerLinkActive="active">Save Manager</a>
+  <a routerLink="/calendar" routerLinkActive="active">Calendar</a>
+  <a routerLink="/tracker" routerLinkActive="active">Tracker</a>
+  <a routerLink="/bundles" routerLinkActive="active">Bundles</a>
+</nav>
 
-<main class="main">
-  <div class="content">
-    <h1>Hello, {{ title }}</h1>
-    <p>Congratulations! Your app is running. 🎉</p>
-  </div>
-</main>
-
-<router-outlet />
+<!-- Main Content -->
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
