@@ -1,6 +1,5 @@
 export interface GoldenWalnutLocation {
     amount: number;
     location: string;
-    completed: true;
+    completed: boolean;
 }
-// todo  
