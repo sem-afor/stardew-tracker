@@ -1,1 +1,18 @@
-<p>save-manager works!</p>
+<app-navbar>
+    <button mat-button>Start New Save</button>
+    <button mat-button>Import Save</button>
+    <button mat-button>Export All Saves</button>
+    <button mat-button>User Settings</button>
+</app-navbar>
+  
+
+<div class="save-list">
+    <mat-card *ngFor="let save of saveFiles" class="save-card">
+        <h3>🌾 {{ save.character.farmName }} Farm</h3>
+        <p>🏠 Farmer: {{ save.character.name }}</p>
+        <p>📅 Year {{ save.currentDate.year }}, {{ save.currentDate.season }} {{ save.currentDate.day }}</p>
+
+        <button mat-stroked-button (click)="openSave(save)">🔄 Load</button>
+        <button mat-icon-button (click)="deleteSave(save.id)">❌</button> 
+    </mat-card>
+</div>

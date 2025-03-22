@@ -1,0 +1,28 @@
+.save-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px;
+  }
+  
+  .save-card {
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px dashed #ccc;  // Dashed gray border
+    //border: 2px dotted #ccc;  // Dotted gray border
+    margin: 5px 0;
+    border-radius: 5px; // Optional for rounded corners
+  }
+  
+  button {
+    margin-right: 5px;
+  }
+  
+
+  h3, p {
+    margin: 0; // Removes all margins
+    padding: 0; // Ensures no extra spacing
+    padding: 5px;
+  }
