@@ -11,7 +11,8 @@ export class SaveFileService {
     this.loadSaves();  // Load save files when the service is instantiated
   }
 
-  getAllSaves(): SaveFile[] {
+  async getAllSaves(): Promise<SaveFile[]> {
+    await this.loadSaves();
     return this.saveFiles;
   }
 
@@ -32,27 +33,27 @@ export class SaveFileService {
       goldenWalnutLocations: createSave.goldenWalnutLocations // todo load empty walnut locations
     };
 
-    const fileName = `${createSave.character.farmName}-${Date.now()}.json`;
+    console.log("createsave-name = ", createSave.name);
+    
+
+    const fileName = `${createSave.name}-${Date.now()}.json`;
 
     // Call IPC to save the file
-    //ipcRenderer.invoke('save-data', newSave, createSave.character.farmName);
+    window.electron.invoke('save-data', newSave, createSave.name);
 
     return newSave;
   }
 
-  deleteSave(id: string): void {
-    this.saveFiles = this.saveFiles.filter(save => save.id !== id);
-    this.saveToLocalStorage();
+  async deleteSave(saveName: string): Promise<void> {
+    await window.electron.invoke('delete-save', saveName);
   }
 
-  saveToLocalStorage(): void {
-    localStorage.setItem('saveFiles', JSON.stringify(this.saveFiles));
-  }
-
-  loadSaves(): void {
-    const data = localStorage.getItem('saveFiles');
-    if (data) {
-      this.saveFiles = JSON.parse(data);
+  async loadSaves(): Promise<void> {
+    try {
+      const saves = await window.electron.invoke('load-save-data'); // Wait for the response
+      this.saveFiles = saves || []; // Assign the data safely
+    } catch (error) {
+      console.error('Error loading saves:', error);
     }
   }
 }

@@ -1,0 +1,28 @@
+/* Make sure the form fields are full-width */
+mat-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;  /* Ensure some padding around the form content */
+  }
+  
+  mat-form-field {
+    width: 100%;  /* Make form fields take up the full width of the container */
+    margin-bottom: 16px;  /* Add margin for spacing between fields */
+  }
+  
+  mat-form-field .mat-label {
+    font-size: 16px;  /* Adjust label font size */
+  }
+  
+  mat-form-field input, mat-form-field select {
+    font-size: 16px;  /* Adjust font size for the inputs */
+  }
+  
+  /* Optional: For better visibility, adjust the height of input fields */
+  mat-form-field input,
+  mat-form-field select {
+    min-height: 40px;  /* Set minimum height to ensure inputs are comfortable */
+    height: auto;      /* Let inputs resize automatically */
+  }
+  

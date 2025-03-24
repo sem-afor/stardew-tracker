@@ -1,5 +1,6 @@
 <app-navbar>
-    <button mat-button>Start New Save</button>
+    <button mat-button (click)="createSave()">Start New Save</button>
+    <button mat-button (click)="addSunnyFarm()">Add Test Save</button>
     <button mat-button>Import Save</button>
     <button mat-button>Export All Saves</button>
     <button mat-button>User Settings</button>
@@ -13,6 +14,6 @@
         <p>📅 Year {{ save.currentDate.year }}, {{ save.currentDate.season }} {{ save.currentDate.day }}</p>
 
         <button mat-stroked-button (click)="openSave(save)">🔄 Load</button>
-        <button mat-icon-button (click)="deleteSave(save.id)">❌</button> 
+        <button mat-icon-button (click)="deleteSave(save.name)">Delete</button> 
     </mat-card>
 </div>
