@@ -18,7 +18,7 @@
             <input 
                 *ngIf="editingDay === day.day"
                 [(ngModel)]="notes[day.day]"
-                (blur)="editingDay = null"
+                (blur)="onNoteEdit(day.day)"  
                 placeholder="Add a note"
                 class="day-note-input"
             />
@@ -82,5 +82,8 @@
         </mat-card>
 
         <button mat-raised-button color="primary" (click)="saveChanges()">Save Changes</button>
+        <button mat-raised-button color="accent" (click)="undoChanges()">Undo</button>
+        <button mat-raised-button color="accent" (click)="redoChanges()">Redo</button>
+
     </div>
 </div>

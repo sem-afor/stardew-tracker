@@ -58,47 +58,41 @@ export class SaveManagerComponent implements OnInit {
     console.log("creating mock for create save");
 
     const defaultData: Character = {
-      name: '',               // Default character name
-      farmName: '',          // Default farm name
-      farmType: 'Standard',       // Default farm type
-      favoriteThing: '',    // Default favorite thing
+      name: '',   
+      farmName: '',          
+      farmType: 'Standard',      
+      favoriteThing: '',    
       appearance: {
-        skin: 1,                  // Default skin tone
-        hair: 1,                  // Default hair style
-        shirt: 1,                 // Default shirt style
-        pants: 1,                 // Default pants style
-        eyeColor: '#6A5ACD',      // Default eye color
-        hairColor: '#8B4513',     // Default hair color
-        pantColor: '#228B22'      // Default pant color
+        skin: 1,                  
+        hair: 1,                  
+        shirt: 1,               
+        pants: 1,                 
+        eyeColor: '#6A5ACD',      
+        hairColor: '#8B4513',     
+        pantColor: '#228B22'      
       }}
     
-    // Open the dialog to let the user fill out save details
     const dialogRef = this.matDialog.open(CreateSaveDataDialogComponent, {
-      width: '500px',  // Adjust width to your liking
-      height: 'auto',  // Let the height adjust automatically based on content
-      //position: { top: '50%', left: '50%' },  // Center the dialog
-      //panelClass: 'center-dialog',  // Use a custom class for styling
-      data: defaultData // Pass the initial save data here (empty if you want to fill in the form)
+      width: '500px',  
+      height: 'auto',  
+      data: defaultData 
     });
   
-    // After the dialog closes, you can access the result
-    const result = await dialogRef.afterClosed().toPromise();  // Wait for the dialog to close
+    const result = await dialogRef.afterClosed().toPromise();  
   
     if (result) {
-      // If the user provided data, create the new save file
       const newSaveFile: SaveFile = {
-        id: '1', // Unique ID
-        name: result.name + '_' + result.farmName + '_' + 'Farm',  // Use name from dialog (or default)
+        id: '1', // Unique ID prvidded by save service
+        name: result.name + '_' + result.farmName + '_' + 'Farm',  
         currentDate: { day: 1, season: "Spring", year: 1 },
-        character: result, // Take character data from the dialog
-        tasks: [],  // Populate with default tasks
-        animals: [],  // Populate with default animals
-        bundlesCompleted: [],  // Populate with default bundles
-        calendars: [this.createDefaultCalendar()],  // Populate with default calendars
-        goldenWalnutLocations: []  // Populate with default walnut locations
+        character: result, 
+        tasks: [],  
+        animals: [],  
+        bundlesCompleted: [], 
+        calendars: [this.createDefaultCalendar()],  
+        goldenWalnutLocations: [] 
       };
   
-      // Call the service to save this data
       this.saveFileService.createSave(newSaveFile);
       this.loadSaves();
     }
@@ -106,21 +100,20 @@ export class SaveManagerComponent implements OnInit {
   
   createDefaultCalendar(): Calendar {
     const days: CalendarDay[] = [];
-  
-    // Create 28 days with no notes and no events
+
     for (let day = 1; day <= 28; day++) {
       const calendarDay: CalendarDay = {
         day: day,
-        notes: '',  // No notes initially
-        events: []  // No events initially
+        notes: '', 
+        events: [] 
       };
       days.push(calendarDay);
     }
   
     return {
-      season: 'Spring', // Set to Spring season
-      year: 1,          // Year 1
-      days: days        // 28 days
+      season: 'Spring', 
+      year: 1,         
+      days: days        
     };
   }
 

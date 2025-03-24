@@ -9,6 +9,7 @@ import { MatCard, MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { Calendar } from '../../models/calendar.model';
+import { Caretaker, Memento, SaveFileOriginator } from '../../services/undo.service';
 
 @Component({
   selector: 'app-tracker',
@@ -21,6 +22,9 @@ export class TrackerComponent implements OnInit {
   saveData: SaveFile | null = null;
   editingDay: number | null = null;
   notes: { [key: number]: string } = {};
+
+  saveFile = new SaveFileOriginator();
+  history : Caretaker = new Caretaker();
 
   constructor(
     private route: ActivatedRoute,
@@ -48,9 +52,9 @@ export class TrackerComponent implements OnInit {
 
       if (!this.saveData || !this.saveData.calendars?.length) {
         console.error('Save file or calendars not found.');
-        this.router.navigate(['/save-manager']); // Redirect if save is not found or has no calendars
+        this.router.navigate(['/save-manager']); 
       } else {
-        this.initializeNotes(); // Initialize notes after loading the save data
+        this.initializeNotes(); 
       }
     } catch (error) {
       console.error('Error loading save:', error);
@@ -59,25 +63,64 @@ export class TrackerComponent implements OnInit {
 
   initializeNotes() {
     if (this.saveData?.calendars?.[0]) {
-      // Initialize the notes object with empty notes from the calendar days
       this.saveData.calendars[0].days.forEach((day) => {
-        this.notes[day.day] = day.notes || ''; // Assigning default empty string if no notes exist
+        this.notes[day.day] = day.notes || ''; 
       });
     }
   }
 
+  saveState() {
+    if (this.saveData) {
+      this.saveFile.setState(this.saveData); 
+      this.history.save(this.saveFile.saveToMemento()); 
+    }
+  }
+  
+  
+  undoChanges() {
+    const previousMemento = this.history.undo(); 
+    if (previousMemento) {
+      this.saveFile.restoreFromMemento(previousMemento);
+      this.saveData = this.saveFile.getState();
+      this.initializeNotes(); 
+      console.log('Undo: Restored previous state');
+    } else {
+      console.log('No previous state to undo.');
+    }
+  }
+  
+  redoChanges() {
+    const nextMemento = this.history.redo();
+    if (nextMemento) {
+      this.saveFile.restoreFromMemento(nextMemento);
+      this.saveData = this.saveFile.getState(); 
+      this.initializeNotes(); 
+      console.log('Redo: Restored next state');
+    } else {
+      console.log('No next state to redo.');
+    }
+  }
+  
+  
   saveChanges() {
     if (this.saveData) {
-      // Update the notes in the calendar
       this.saveData.calendars[0].days.forEach((day) => {
         if (this.notes[day.day] !== day.notes) {
-          day.notes = this.notes[day.day]; // Update the notes for the day
+          console.log("saved note " + day.notes + " for day " + day.day);
+          
+          day.notes = this.notes[day.day]; 
         }
       });
 
-      // Save the updated `saveData` with the modified notes
-      this.saveFileService.createSave(this.saveData); // Assuming `createSave` updates the save file
+      this.saveFileService.createSave(this.saveData); 
       console.log('Saving changes...');
+      this.saveState(); 
     }
   }
+
+  onNoteEdit(day: number) {
+  this.saveState();
+  this.editingDay = null; 
+}
+
 }

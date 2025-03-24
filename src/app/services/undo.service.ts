@@ -3,12 +3,12 @@
 import { SaveFile } from "../models/save-file.model";
 
 // Memento: Stores a snapshot of SaveFile state
-class Memento {
-  constructor(public state: SaveFile) {}
+export class Memento {
+  constructor(public saveDataState: SaveFile) {}
 }
   
   // Originator: The SaveFile that changes
-  class SaveFileOriginator {
+  export class SaveFileOriginator {
     private state!: SaveFile;
 
     // Set the state of the SaveFile
@@ -23,7 +23,7 @@ class Memento {
 
     // Restore the state from a Memento
     restoreFromMemento(memento: Memento) {
-        this.state = { ...memento.state };
+        this.state = { ...memento.saveDataState };
     }
 
     // Get the current state
@@ -34,37 +34,33 @@ class Memento {
 
   
   // Caretaker: Stores history of SaveFile states
-  class Caretaker {
-    private history: Memento[] = [];
-
-    // Save a Memento object to history
-    save(memento: Memento) {
-        this.history.push(memento);
+  export class Caretaker {
+    private mementos: Memento[] = []; // Store Mementos
+    private currentIndex: number = -1;
+  
+    save(memento: Memento): void {
+      // If we are in the middle of a history sequence, clear any "redo" history
+      this.mementos = this.mementos.slice(0, this.currentIndex + 1);
+      this.mementos.push(memento);
+      this.currentIndex++;
+      console.log("added memento, current index = " + this.currentIndex);
     }
-
-    // Undo: pop the last Memento object and return it
+  
     undo(): Memento | null {
-        return this.history.pop() || null;
+      if (this.currentIndex > 0) {
+        this.currentIndex--;
+        console.log("undo, current index = " + this.currentIndex);
+        return this.mementos[this.currentIndex];
+      }
+      return null;
     }
-}
-
   
-  /*
-  // Example Usage:
-  const saveFile = new SaveFileOriginator();
-  const history = new Caretaker();
-  
-  saveFile.setState(SaveFileFactory.createSaveFile("Playthrough 1", "Sunny Farm", "Alex"));
-  history.save(saveFile.saveToMemento()); // Save state
-  
-  saveFile.setState(SaveFileFactory.createSaveFile("Playthrough 2", "Moonlight Farm", "Elliott"));
-  history.save(saveFile.saveToMemento()); // Save new state
-  
-  console.log("Current state:", saveFile.getState());
-  
-  // Undo
-  const previousState = history.undo();
-  if (previousState) saveFile.restoreFromMemento(previousState);
-  
-  console.log("After undo:", saveFile.getState());
-  */
+    redo(): Memento | null {
+      if (this.currentIndex < this.mementos.length - 1) {
+        this.currentIndex++;
+        console.log("redo, current index = " + this.currentIndex);
+        return this.mementos[this.currentIndex];
+      }
+      return null;
+    }
+  }

@@ -41,7 +41,7 @@ saveData: SaveFile | null = null;
         this.saveData = await this.saveFileService.loadSave(filename);
         if (!this.saveData) {
             console.error('Save file not found.');
-            this.router.navigate(['/save-manager']); // Redirect if save is not found
+            this.router.navigate(['/save-manager']); 
         }
     } catch (error) {
         console.error('Error loading save:', error);
