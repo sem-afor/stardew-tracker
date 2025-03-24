@@ -1,9 +1,9 @@
 {
   "name": "stardew-tracker",
   "version": "1.0.0",
-  "type": "commonjs",
-  "main": "./electron/main.js",
-  "exports": "./electron/main.js",
+  "type": "module",
+  "main": "./main.js",
+  "exports": "./main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng build --watch & electron-forge start",
@@ -32,6 +32,7 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^10.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

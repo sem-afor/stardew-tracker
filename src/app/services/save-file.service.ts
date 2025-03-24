@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SaveFile } from '../models/save-file.model';
 
-// Factory
 @Injectable({
   providedIn: 'root',
 })
@@ -9,7 +8,7 @@ export class SaveFileService {
   private saveFiles: SaveFile[] = [];
 
   constructor() {
-    this.loadSaves();
+    this.loadSaves();  // Load save files when the service is instantiated
   }
 
   getAllSaves(): SaveFile[] {
@@ -20,27 +19,24 @@ export class SaveFileService {
     return this.saveFiles.find(save => save.id === id);
   }
 
-  createSave(name: string, farmName: string, character: string): SaveFile {
+  createSave(createSave: SaveFile): SaveFile {
     const newSave: SaveFile = {
-      id: Date.now().toString(), // Unique ID for now
-      name,
+      id: Date.now().toString(), // Unique ID for the new save file
+      name: createSave.name,
       currentDate: { day: 1, season: 'Spring', year: 1 }, // Default values
-      character: {
-        name: character,
-        farmName,
-        farmType: 'Standard',
-        favoriteThing: '',
-        loveInterest: undefined,
-        appearance: { skin: 1, hair: 1, shirt: 1, pants: 1, eyeColor: '', hairColor: '', pantColor: '' },
-      },
-      tasks: [],
-      animals: [],
-      bundlesCompleted: [],
-      calendars: [],
-      goldenWalnutLocations: [],
+      character: createSave.character,
+      tasks: createSave.tasks, // todo load empty example tasks ?
+      animals: createSave.animals, // todo add chickens if with the one farm otherwise load empty 
+      bundlesCompleted: createSave.bundlesCompleted, // todo load empty (no remix) bundles
+      calendars: createSave.calendars, // todo load empty calendar and add birthday ? 
+      goldenWalnutLocations: createSave.goldenWalnutLocations // todo load empty walnut locations
     };
-    this.saveFiles.push(newSave);
-    this.saveToLocalStorage();
+
+    const fileName = `${createSave.character.farmName}-${Date.now()}.json`;
+
+    // Call IPC to save the file
+    //ipcRenderer.invoke('save-data', newSave, createSave.character.farmName);
+
     return newSave;
   }
 

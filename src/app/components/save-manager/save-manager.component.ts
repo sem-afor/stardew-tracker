@@ -34,70 +34,6 @@ export class SaveManagerComponent implements OnInit {
 
   loadSaves(): void {
     this.saveFiles = this.saveFileService.getAllSaves();
-
-    // mock
-    this.saveFiles = [
-      {
-        id: '1',
-        name: "Sunny",
-        currentDate: { day: 15, season: "Fall", year: 3 },
-        character: {
-          name: "Alex",
-          farmName: "Sunny",
-          farmType: "Standard",
-          favoriteThing: "Coffee",
-          loveInterest: {
-            name: "Leah",
-            heartEvents: [
-              { day: 12, season: "Spring", description: "Heart Event 1", type: "Heart Event", completed: true },
-              { day: 22, season: "Summer", description: "Heart Event 2", type: "Heart Event", completed: false }
-            ],
-            likedGifts: ["Wine", "Salad"],
-            lovedGifts: ["Goat Cheese", "Truffle"],
-            neutralGifts: ["Apple"],
-            dislikedGifts: ["Quartz"],
-            hatedGifts: ["Driftwood"]
-          },
-          appearance: {
-            skin: 2,
-            hair: 1,
-            shirt: 4,
-            pants: 2,
-            eyeColor: "#6A5ACD",
-            hairColor: "#8B4513",
-            pantColor: "#228B22"
-          }
-        },
-        tasks: [
-          { name: "Water crops", completed: true },
-          { name: "Visit Pierre's", completed: false }
-        ],
-        animals: [
-          { name: "Bessie", species: "Cow", barnType: "Barn" },
-          { name: "Chirpy", species: "Chicken", barnType: "Coop" }
-        ],
-        bundlesCompleted: [
-          { id: "101", name: "Spring Crops Bundle", itemsRequired: [
-            { name: "Parsnip", completed: true },
-            { name: "Green Bean", completed: false }
-          ]}
-        ],
-        calendars: [
-          {
-            season: "Fall",
-            year: 3,
-            days: [
-              { day: 1, events: [{ day: 1, season: "Fall", description: "Fall Festival", type: "Festival", completed: false }] },
-              { day: 15, notes: "Leah's Birthday", events: [] }
-            ]
-          }
-        ],
-        goldenWalnutLocations: [
-          { location: "Beach", amount: 5, completed: false },
-          { location: "Jungle", amount: 3, completed: true }
-        ]
-      }
-    ];
   }
 
   openSave(save: SaveFile) {
@@ -107,7 +43,69 @@ export class SaveManagerComponent implements OnInit {
 
   createSave() {
     // todo add inputs to choose save name etc
-    const newSave = this.saveFileService.createSave('New Save', 'New Farm', 'Player');
+    // all character info, leave out love interest
+    // mock save file:
+    const newSaveFile : SaveFile = {
+      id: '1',
+      name: "Sunny",
+      currentDate: { day: 15, season: "Fall", year: 3 },
+      character: {
+        name: "Alex",
+        farmName: "Sunny",
+        farmType: "Standard",
+        favoriteThing: "Coffee",
+        loveInterest: {
+          name: "Leah",
+          heartEvents: [
+            { day: 12, season: "Spring", description: "Heart Event 1", type: "Heart Event", completed: true },
+            { day: 22, season: "Summer", description: "Heart Event 2", type: "Heart Event", completed: false }
+          ],
+          likedGifts: ["Wine", "Salad"],
+          lovedGifts: ["Goat Cheese", "Truffle"],
+          neutralGifts: ["Apple"],
+          dislikedGifts: ["Quartz"],
+          hatedGifts: ["Driftwood"]
+        },
+        appearance: {
+          skin: 2,
+          hair: 1,
+          shirt: 4,
+          pants: 2,
+          eyeColor: "#6A5ACD",
+          hairColor: "#8B4513",
+          pantColor: "#228B22"
+        }
+      },
+      tasks: [
+        { name: "Water crops", completed: true },
+        { name: "Visit Pierre's", completed: false }
+      ],
+      animals: [
+        { name: "Bessie", species: "Cow", barnType: "Barn" },
+        { name: "Chirpy", species: "Chicken", barnType: "Coop" }
+      ],
+      bundlesCompleted: [
+        { id: "101", name: "Spring Crops Bundle", itemsRequired: [
+          { name: "Parsnip", completed: true },
+          { name: "Green Bean", completed: false }
+        ]}
+      ],
+      calendars: [
+        {
+          season: "Fall",
+          year: 3,
+          days: [
+            { day: 1, events: [{ day: 1, season: "Fall", description: "Fall Festival", type: "Festival", completed: false }] },
+            { day: 15, notes: "Leah's Birthday", events: [] }
+          ]
+        }
+      ],
+      goldenWalnutLocations: [
+        { location: "Beach", amount: 5, completed: false },
+        { location: "Jungle", amount: 3, completed: true }
+      ]
+    };
+    this.saveFileService.createSave(newSaveFile);
     this.loadSaves(); 
   }
 
