@@ -1,14 +1,43 @@
 import { Injectable } from '@angular/core';
 import { SaveFile } from '../models/save-file.model';
+import { ElectronStoreService } from './electron-store-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SaveFileService {
   private saveFiles: SaveFile[] = [];
+  appSettings: any;
 
-  constructor() {
-    this.loadSaves();  // Load save files when the service is instantiated
+  constructor(private electronStoreService: ElectronStoreService) {
+    this.loadSaves();  
+    this.appSettings = this.electronStoreService.getData('appSettings');
+  }
+
+  saveSettings(): void {
+    // Save settings to Electron store
+    this.electronStoreService.setData('appSettings', this.appSettings);
+  }
+
+  clearSettings(): void {
+    // Clear settings from Electron store
+    this.electronStoreService.deleteData('appSettings');
+  }
+
+  saveVillagerData(villagerData: any) {
+    this.electronStoreService.setData('villagerData', villagerData);
+  }
+
+  loadVillagerData() {
+    return this.electronStoreService.getData('villagerData');
+  }
+
+  saveEventData(eventData: any) {
+    this.electronStoreService.setData('eventData', eventData);
+  }
+
+  loadEventData() {
+    return this.electronStoreService.getData('eventData');
   }
 
   async getAllSaves(): Promise<SaveFile[]> {
