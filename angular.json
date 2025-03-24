@@ -19,6 +19,9 @@
           "options": {
             "outputPath": "dist/stardew-tracker",
             "index": "src/index.html",
+            "styles": [
+              "src/styles.scss"
+            ],
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
@@ -28,10 +31,6 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
-            ],
-            "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
             ],
             "scripts": []
           },

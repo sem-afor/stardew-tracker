@@ -4,6 +4,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { SaveFile } from '../../models/save-file.model';
 import { CommonModule } from '@angular/common';
+import { SaveFileService } from '../../services/save-file.service';
+  
+
+/**
+    The Save Manager page shows all save files.
+    When you select a save, it loads the data (character, progress, etc.).
+    Other pages (Calendar, Tracker, Bundles) use the currently loaded save to display info.
+    The Undo (Memento) pattern could track changes while playing.
+ */
 
 @Component({
   selector: 'app-save-manager',
@@ -13,20 +22,19 @@ import { CommonModule } from '@angular/common';
   styleUrl: './save-manager.component.scss'
 })
 export class SaveManagerComponent implements OnInit {
-  
-
-  /**
-      The Save Manager page shows all save files.
-      When you select a save, it loads the data (character, progress, etc.).
-      Other pages (Calendar, Tracker, Bundles) use the currently loaded save to display info.
-      The Undo (Memento) pattern could track changes while playing.
-   */
 
   saveFiles: SaveFile[] = [];
   selectedSave: SaveFile | null = null;
 
+  constructor(private saveFileService: SaveFileService) {}
+
   ngOnInit(): void {
-    // todo load all save names
+    this.loadSaves();
+  }
+
+  loadSaves(): void {
+    this.saveFiles = this.saveFileService.getAllSaves();
+
     // mock
     this.saveFiles = [
       {
@@ -90,12 +98,17 @@ export class SaveManagerComponent implements OnInit {
         ]
       }
     ];
-
   }
 
   openSave(save: SaveFile) {
     this.selectedSave = save;
     // todo open specific save
+  }
+
+  createSave() {
+    // todo add inputs to choose save name etc
+    const newSave = this.saveFileService.createSave('New Save', 'New Farm', 'Player');
+    this.loadSaves(); 
   }
 
   editSave(save: SaveFile) {
@@ -104,14 +117,11 @@ export class SaveManagerComponent implements OnInit {
   }
 
   deleteSave(saveId: string) {
-    this.saveFiles = this.saveFiles.filter(save => save.id !== saveId);
+    this.saveFileService.deleteSave(saveId);
+    this.loadSaves();
     if (this.selectedSave?.id === saveId) {
       this.selectedSave = null;
     }
-  }
-
-  importSave(){
-    // todo
   }
 
   exportSave(){
