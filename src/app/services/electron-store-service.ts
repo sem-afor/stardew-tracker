@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import ElectronStore from 'electron-store';
 
+// SINGLETON 
+// behaving like a Singleton due to Angular's dependency injection system and the @Injectable({ providedIn: 'root' }) decorator
 @Injectable({
   providedIn: 'root',
 })

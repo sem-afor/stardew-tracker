@@ -2,16 +2,15 @@
 
 import { SaveFile } from "../models/save-file.model";
 
-// Memento: Stores a snapshot of SaveFile state
+// MEMENTO: Stores a snapshot of SaveFile state
 export class Memento {
   constructor(public saveDataState: SaveFile) {}
 }
-  
+
   // Originator: The SaveFile that changes
   export class SaveFileOriginator {
     private state!: SaveFile;
 
-    // Set the state of the SaveFile
     setState(state: SaveFile) {
         this.state = { ...state }; // Deep copy to prevent reference issues
     }
@@ -21,12 +20,10 @@ export class Memento {
         return new Memento({ ...this.state });
     }
 
-    // Restore the state from a Memento
     restoreFromMemento(memento: Memento) {
         this.state = { ...memento.saveDataState };
     }
 
-    // Get the current state
     getState(): SaveFile {
         return this.state;
     }
@@ -35,7 +32,7 @@ export class Memento {
   
   // Caretaker: Stores history of SaveFile states
   export class Caretaker {
-    private mementos: Memento[] = []; // Store Mementos
+    private mementos: Memento[] = []; 
     private currentIndex: number = -1;
   
     save(memento: Memento): void {

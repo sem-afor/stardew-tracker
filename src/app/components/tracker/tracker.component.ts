@@ -69,6 +69,7 @@ export class TrackerComponent implements OnInit {
     }
   }
 
+  // Save the current state as a MEMENTO
   saveState() {
     if (this.saveData) {
       this.saveFile.setState(this.saveData); 
@@ -76,7 +77,7 @@ export class TrackerComponent implements OnInit {
     }
   }
   
-  
+  // Undo the changes by restoring the previous state
   undoChanges() {
     const previousMemento = this.history.undo(); 
     if (previousMemento) {
@@ -89,6 +90,7 @@ export class TrackerComponent implements OnInit {
     }
   }
   
+  // Redo the changes by restoring the next state
   redoChanges() {
     const nextMemento = this.history.redo();
     if (nextMemento) {
@@ -118,6 +120,7 @@ export class TrackerComponent implements OnInit {
     }
   }
 
+  // Track edits to the notes
   onNoteEdit(day: number) {
   this.saveState();
   this.editingDay = null; 

@@ -2,6 +2,29 @@ import { Injectable } from '@angular/core';
 import { SaveFile } from '../models/save-file.model';
 import { ElectronStoreService } from './electron-store-service';
 
+// FACTORY
+export class SaveFileFactory {
+  static createNewSave(createSave: SaveFile): SaveFile {
+    // Abstract the creation logic into the factory class
+    const newSave: SaveFile = {
+      id: Date.now().toString(),
+      name: createSave.name,
+      currentDate: { day: 1, season: 'Spring', year: 1 },
+      character: createSave.character,
+      tasks: createSave.tasks,
+      animals: createSave.animals,
+      bundlesCompleted: createSave.bundlesCompleted,
+      calendars: createSave.calendars,
+      goldenWalnutLocations: createSave.goldenWalnutLocations
+    };
+
+    return newSave;
+  }
+}
+
+
+// SINGLETON 
+// behaving like a Singleton due to Angular's dependency injection system and the @Injectable({ providedIn: 'root' }) decorator
 @Injectable({
   providedIn: 'root',
 })
@@ -50,28 +73,13 @@ export class SaveFileService {
   }
 
   createSave(createSave: SaveFile): SaveFile {
-    const newSave: SaveFile = {
-      id: Date.now().toString(), // Unique ID for the new save file
-      name: createSave.name,
-      currentDate: { day: 1, season: 'Spring', year: 1 }, // Default values
-      character: createSave.character,
-      tasks: createSave.tasks, // todo load empty example tasks ?
-      animals: createSave.animals, // todo add chickens if with the one farm otherwise load empty 
-      bundlesCompleted: createSave.bundlesCompleted, // todo load empty (no remix) bundles
-      calendars: createSave.calendars, // todo load empty calendar and add birthday ? 
-      goldenWalnutLocations: createSave.goldenWalnutLocations // todo load empty walnut locations
-    };
-
-    console.log("createsave-name = ", createSave.name);
-    
-
+    // Use the FACTORY to create the new SaveFile
+    const newSave: SaveFile = SaveFileFactory.createNewSave(createSave);
     const fileName = `${createSave.name}.json`;
-
-    // Call IPC to save the file
     window.electron.invoke('save-data', newSave, createSave.name);
-
     return newSave;
   }
+  
 
   async deleteSave(saveName: string): Promise<void> {
     await window.electron.invoke('delete-save', saveName);
@@ -79,8 +87,8 @@ export class SaveFileService {
 
   async loadSaves(): Promise<void> {
     try {
-      const saves = await window.electron.invoke('load-save-data'); // Wait for the response
-      this.saveFiles = saves || []; // Assign the data safely
+      const saves = await window.electron.invoke('load-save-data'); 
+      this.saveFiles = saves || []; 
     } catch (error) {
       console.error('Error loading saves:', error);
     }
