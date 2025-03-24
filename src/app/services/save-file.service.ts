@@ -36,7 +36,7 @@ export class SaveFileService {
     console.log("createsave-name = ", createSave.name);
     
 
-    const fileName = `${createSave.name}-${Date.now()}.json`;
+    const fileName = `${createSave.name}.json`;
 
     // Call IPC to save the file
     window.electron.invoke('save-data', newSave, createSave.name);
@@ -54,6 +54,30 @@ export class SaveFileService {
       this.saveFiles = saves || []; // Assign the data safely
     } catch (error) {
       console.error('Error loading saves:', error);
+    }
+  }
+
+  async loadSave(filename: string): Promise<SaveFile | null> {
+    try {
+        const save = await window.electron.invoke('load-single-save', filename);
+        if (!save) {
+            console.error('Save file not found.');
+            return null;
+        }
+        return save;
+    } catch (error) {
+        console.error('Error loading save:', error);
+        return null;
+    }
+  }
+
+
+  async saveChanges(save: SaveFile): Promise<void> {
+    try {
+      window.electron.invoke('save-data', save, save.name);
+      console.log('Save updated successfully');
+    } catch (error) {
+      console.error('Error saving changes:', error);
     }
   }
 }

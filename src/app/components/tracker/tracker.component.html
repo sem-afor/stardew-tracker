@@ -1,8 +1,83 @@
 <app-navbar>
-    <a routerLink="/save-manager" routerLinkActive="active">Exit</a>
-    <a routerLink="/calendar" routerLinkActive="active">Calendar</a>
-    <a routerLink="/tracker" routerLinkActive="active">Tracker</a>
-    <a routerLink="/bundles" routerLinkActive="active">Bundles</a>
+    <button mat-button [routerLink]="['/save-manager']" routerLinkActive="active">Exit</button>
+    <button mat-button [routerLink]="['/calendar', saveData?.name]" routerLinkActive="active">Calendar</button>
+    <button mat-button [routerLink]="['/tracker', saveData?.name]" routerLinkActive="active">Tracker</button>
+    <button mat-button [routerLink]="['/bundles', saveData?.name]" routerLinkActive="active">Bundles</button>
 </app-navbar>
 
-Tracker
+<div class="tracker-layout">
+    <!-- Left Side: Calendar -->
+    <div class="calendar-container">
+        <h3>Farm Calendar</h3>
+        <div class="calendar-grid">
+            <div *ngFor="let day of days" class="calendar-day">
+                <span class="day-number">{{ day }}</span>
+                <input 
+                    *ngIf="editingDay === day"
+                    [(ngModel)]="notes[day]"
+                    (blur)="editingDay = null"
+                    placeholder="Add a note"
+                    class="day-note-input"
+                />
+
+                <button 
+                    mat-icon-button 
+                    *ngIf="editingDay !== day"
+                    (click)="editingDay = day">
+                    <mat-icon>edit</mat-icon>
+                </button>
+
+                <p *ngIf="notes[day]" class="day-note">{{ notes[day] }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side: Character & Progress Info -->
+    <div class="tracker-container">
+        <h2 class="tracker-title">Tracking: {{ saveData?.character?.farmName }}</h2>
+
+        <!-- Progress Card -->
+        <mat-card class="tracker-card">
+            <mat-card-title>Current Progress</mat-card-title>
+            <mat-card-content>
+                <p><strong>Season:</strong> {{ saveData?.currentDate?.season }}</p>
+                <p><strong>Day:</strong> {{ saveData?.currentDate?.day }}</p>
+                <p><strong>Year:</strong> {{ saveData?.currentDate?.year }}</p>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Character Info Card -->
+        <mat-card class="tracker-card">
+            <mat-card-title>Character Info</mat-card-title>
+            <mat-card-content>
+                <p><strong>Name:</strong> {{ saveData?.character?.name }}</p>
+                <p><strong>Farm Type:</strong> {{ saveData?.character?.farmType }}</p>
+                <p><strong>Favorite Thing:</strong> {{ saveData?.character?.favoriteThing }}</p>
+
+                <div *ngIf="saveData?.character?.loveInterest">
+                    <p><strong>Love Interest:</strong> {{ saveData?.character?.loveInterest?.name }}</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Appearance Card -->
+        <mat-card class="tracker-card">
+            <mat-card-title>Appearance</mat-card-title>
+            <mat-card-content>
+                <div class="appearance-grid">
+                    <p><strong>Skin Tone:</strong> {{ saveData?.character?.appearance?.skin }}</p>
+                    <p><strong>Hair Style:</strong> {{ saveData?.character?.appearance?.hair }}</p>
+                    <p><strong>Shirt:</strong> {{ saveData?.character?.appearance?.shirt }}</p>
+                    <p><strong>Pants:</strong> {{ saveData?.character?.appearance?.pants }}</p>
+                </div>
+                <div class="color-preview">
+                    <p><strong>Eye Color:</strong> <span class="color-circle" [style.backgroundColor]="saveData?.character?.appearance?.eyeColor"></span></p>
+                    <p><strong>Hair Color:</strong> <span class="color-circle" [style.backgroundColor]="saveData?.character?.appearance?.hairColor"></span></p>
+                    <p><strong>Pant Color:</strong> <span class="color-circle" [style.backgroundColor]="saveData?.character?.appearance?.pantColor"></span></p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <button mat-raised-button color="primary" (click)="saveChanges()">Save Changes</button>
+    </div>
+</div>

@@ -119,6 +119,30 @@ ipcMain.handle('load-save-data', async () => {
     }
   });
 
+  ipcMain.handle('load-single-save', async (event, filename) => {
+    try {
+      // Ensure the filename has a .json extension
+      if (!filename.endsWith('.json')) {
+        filename += '.json';
+      }
+        const appDataDir = app.getPath('appData');
+        const saveDir = path.join(appDataDir, 'StardewTrackerSaves');
+        const filePath = path.join(saveDir, filename);
+
+        if (!fs.existsSync(filePath)) {
+            console.warn(`Save file not found: ${filename}`);
+            return null;
+        }
+
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        return JSON.parse(fileContent);
+    } catch (error) {
+        console.error('Error loading save file:', error);
+        return null;
+    }
+  });
+
+
   ipcMain.handle('delete-save', async (event, farmName) => {
     try {
       const appDataDir = app.getPath('appData');

@@ -8,6 +8,7 @@ import { SaveFileService } from '../../services/save-file.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateSaveDataDialogComponent } from '../create-save-data-dialog/create-save-data-dialog.component';
 import { Character } from '../../models/character.model';
+import { Router } from '@angular/router';
   
 
 /**
@@ -31,7 +32,8 @@ export class SaveManagerComponent implements OnInit {
 
   constructor(
     private matDialog: MatDialog,
-    private saveFileService: SaveFileService) {}
+    private saveFileService: SaveFileService,
+    private router: Router) {}
 
   ngOnInit(): void {
     this.loadSaves();
@@ -45,7 +47,10 @@ export class SaveManagerComponent implements OnInit {
 
   openSave(save: SaveFile) {
     this.selectedSave = save;
-    // todo open specific save
+    console.log("load save:");
+    console.log(this.selectedSave.name); 
+    
+    this.router.navigate(['/tracker', save.name]); 
   }
 
   async createSave() {

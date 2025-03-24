@@ -1,1 +1,7 @@
-<p>calendar works!</p>
+<app-navbar>
+    <button mat-button [routerLink]="['/save-manager']" routerLinkActive="active">Exit</button>
+    <button mat-button [routerLink]="['/calendar', saveData?.name]" routerLinkActive="active">Calendar</button>
+    <button mat-button [routerLink]="['/tracker', saveData?.name]" routerLinkActive="active">Tracker</button>
+    <button mat-button [routerLink]="['/bundles', saveData?.name]" routerLinkActive="active">Bundles</button>
+</app-navbar>
+

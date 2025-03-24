@@ -9,7 +9,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'welcome', pathMatch: 'full' }, // Default route
   { path: 'save-manager', component: SaveManagerComponent },
   { path: 'calendar', component: CalendarComponent },
-  { path: 'tracker', component: TrackerComponent },
+  { path: 'tracker/:filename', component: TrackerComponent },
   { path: 'bundles', component: BundlesComponent },
   { path: 'welcome', component: WelcomeComponent }
 ];
