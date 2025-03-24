@@ -1,25 +1,30 @@
 //observer pattern (Syncing UI Updates)
 // Observer interface
+// Observer interface
 interface Observer {
-    update(data: any): void;
-  }
-  
+  update(data: any): void;
+}
+
 // Observable (Subject)
 class EventBus {
-    private observers: Observer[] = [];
-  
-    subscribe(observer: Observer) {
+  private observers: Observer[] = [];
+
+  // Subscribe an observer
+  subscribe(observer: Observer) {
       this.observers.push(observer);
-    }
-  
-    unsubscribe(observer: Observer) {
-      this.observers = this.observers.filter(obs => obs !== observer);
-    }
-  
-    notify(data: any) {
-      this.observers.forEach(observer => observer.update(data));
-    }
   }
+
+  // Unsubscribe an observer
+  unsubscribe(observer: Observer) {
+      this.observers = this.observers.filter(obs => obs !== observer);
+  }
+
+  // Notify all observers about the data update
+  notify(data: any) {
+      this.observers.forEach(observer => observer.update(data));
+  }
+}
+
   
   /* Example Observers (UI Components)
   class TaskListComponent implements Observer {

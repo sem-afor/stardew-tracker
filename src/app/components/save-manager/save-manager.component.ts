@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateSaveDataDialogComponent } from '../create-save-data-dialog/create-save-data-dialog.component';
 import { Character } from '../../models/character.model';
 import { Router } from '@angular/router';
+import { Calendar, CalendarDay } from '../../models/calendar.model';
   
 
 /**
@@ -93,7 +94,7 @@ export class SaveManagerComponent implements OnInit {
         tasks: [],  // Populate with default tasks
         animals: [],  // Populate with default animals
         bundlesCompleted: [],  // Populate with default bundles
-        calendars: [],  // Populate with default calendars
+        calendars: [this.createDefaultCalendar()],  // Populate with default calendars
         goldenWalnutLocations: []  // Populate with default walnut locations
       };
   
@@ -102,6 +103,26 @@ export class SaveManagerComponent implements OnInit {
       this.loadSaves();
     }
   }  
+  
+  createDefaultCalendar(): Calendar {
+    const days: CalendarDay[] = [];
+  
+    // Create 28 days with no notes and no events
+    for (let day = 1; day <= 28; day++) {
+      const calendarDay: CalendarDay = {
+        day: day,
+        notes: '',  // No notes initially
+        events: []  // No events initially
+      };
+      days.push(calendarDay);
+    }
+  
+    return {
+      season: 'Spring', // Set to Spring season
+      year: 1,          // Year 1
+      days: days        // 28 days
+    };
+  }
 
   editSave(save: SaveFile) {
     this.selectedSave = save;
@@ -171,16 +192,7 @@ export class SaveManagerComponent implements OnInit {
           { name: "Green Bean", completed: false }
         ]}
       ],
-      calendars: [
-        {
-          season: "Fall",
-          year: 3,
-          days: [
-            { day: 1, events: [{ day: 1, season: "Fall", description: "Fall Festival", type: "Festival", completed: false }] },
-            { day: 15, notes: "Leah's Birthday", events: [] }
-          ]
-        }
-      ],
+      calendars: [this.createDefaultCalendar()],
       goldenWalnutLocations: [
         { location: "Beach", amount: 5, completed: false },
         { location: "Jungle", amount: 3, completed: true }

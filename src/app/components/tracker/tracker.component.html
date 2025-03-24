@@ -7,30 +7,33 @@
 
 <div class="tracker-layout">
     <!-- Left Side: Calendar -->
-    <div class="calendar-container">
-        <h3>Farm Calendar</h3>
-        <div class="calendar-grid">
-            <div *ngFor="let day of days" class="calendar-day">
-                <span class="day-number">{{ day }}</span>
-                <input 
-                    *ngIf="editingDay === day"
-                    [(ngModel)]="notes[day]"
-                    (blur)="editingDay = null"
-                    placeholder="Add a note"
-                    class="day-note-input"
-                />
+    <!-- Left Side: Calendar -->
+<div class="calendar-container">
+    <h3>Farm Calendar</h3>
+    <div class="calendar-grid">
+        <!-- Ensuring we handle undefined calendars -->
+        <div *ngFor="let day of (saveData?.calendars?.[0]?.days || [])" class="calendar-day">
+            <span class="day-number">{{ day.day }}</span>
 
-                <button 
-                    mat-icon-button 
-                    *ngIf="editingDay !== day"
-                    (click)="editingDay = day">
-                    <mat-icon>edit</mat-icon>
-                </button>
+            <input 
+                *ngIf="editingDay === day.day"
+                [(ngModel)]="notes[day.day]"
+                (blur)="editingDay = null"
+                placeholder="Add a note"
+                class="day-note-input"
+            />
 
-                <p *ngIf="notes[day]" class="day-note">{{ notes[day] }}</p>
-            </div>
-        </div>
+            <button 
+                mat-icon-button 
+                *ngIf="editingDay !== day.day"
+                (click)="editingDay = day.day">
+                <mat-icon>edit</mat-icon>
+            </button>
+
+            <p *ngIf="notes[day.day]" class="day-note">{{ notes[day.day] }}</p>
+        </div>              
     </div>
+</div>
 
     <!-- Right Side: Character & Progress Info -->
     <div class="tracker-container">
